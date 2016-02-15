@@ -14,7 +14,7 @@ var bio = {
         "location": "Bengaluru"
     },
     "skills" : ["Design", "Coding", "Testing", "C/C++", "Python", "JavaScript"],
-    "biopic" : "https://twitter.com/AbhiramIyer/profile_image?size=original",
+    "biopic" : "https://twitter.com/AbhiramIyer/profile_image?size=original"
 };
 
 bio.display = function() {
@@ -54,8 +54,8 @@ var education = {
             "name": "National Institute of Technology Karnataka",
             "location": "Surathkal",
             "degree": "Bachelor of Engineering",
-            "majors": "Information Technology",
-            "dates": "2000-2004",
+            "majors": ["Information Technology"],
+            "dates": 2004,
             "url": "http://nitk.ac.in"
         }
     ],
@@ -63,10 +63,10 @@ var education = {
         {
             "title" : "Front-End Web Developer Nanodegree",
             "school" : "Udacity",
-            "dates" : "2016",
+            "date" : 2016,
             "url" : "https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001"
        }
-    ],
+    ]
 };
 
 education.display = function () {
@@ -80,7 +80,11 @@ education.display = function () {
             formattedSchoolDegree = HTMLschoolDegree.replace("%data%", school.degree);
             $(".education-entry:last").append(formattedSchoolName + formattedSchoolDegree);
             $(".education-entry:last").append(HTMLschoolDates.replace("%data%", school.dates));
-            $(".education-entry:last").append(HTMLschoolMajor.replace("%data%", school.majors));
+            
+            school.majors.forEach(function(major){
+                $(".education-entry:last").append(HTMLschoolMajor.replace("%data%", major));    
+            });            
+            
             $(".education-entry:last").append(HTMLschoolLocation.replace("%data%", school.location));
             $(".education-entry:last").append(HTMLschoolURL.replace("%data%", school.url));
         });
@@ -96,7 +100,7 @@ education.display = function () {
             formattedOnlineTitle = HTMLonlineTitle.replace("%data%", onlineCourse.title);
             formattedOnlineSchool = HTMLonlineSchool.replace("%data%", onlineCourse.school);
             $(".education-entry:last").append(formattedOnlineTitle + formattedOnlineSchool);
-            $(".education-entry:last").append(HTMLonlineDates.replace("%data%", onlineCourse.dates));
+            $(".education-entry:last").append(HTMLonlineDates.replace("%data%", onlineCourse.date));
             $(".education-entry:last").append(HTMLonlineURL.replace("%data%", onlineCourse.url));
         });
     }
@@ -126,7 +130,7 @@ var work = {
             "dates": "2006-2008",
             "description": "Developed foo bar function"
         }
-    ],
+    ]
 };
 
 work.display = function () {
