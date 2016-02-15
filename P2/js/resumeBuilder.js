@@ -18,14 +18,14 @@ var bio = {
 };
 
 bio.display = function() {
-	var formattedName = HTMLheaderName.replace("%data%",bio.name);
-	var formattedRole = HTMLheaderRole.replace("%data%",bio.role);
-	var formattedImage = HTMLbioPic.replace("%data%",bio.biopic);
-	var formattedMessage = HTMLwelcomeMsg.replace("%data%",bio.welcomeMessage);
+    var formattedName = HTMLheaderName.replace("%data%",bio.name);
+    var formattedRole = HTMLheaderRole.replace("%data%",bio.role);
+    var formattedImage = HTMLbioPic.replace("%data%",bio.biopic);
+    var formattedMessage = HTMLwelcomeMsg.replace("%data%",bio.welcomeMessage);
 
     $("#header").append(formattedName, formattedRole, formattedImage, formattedMessage);
 
-	if (bio.skills.length > 0) {
+    if (bio.skills.length > 0) {
 
         $("#header").append(HTMLskillsStart);
         bio.skills.forEach(function(skill) {
@@ -46,7 +46,7 @@ bio.display = function() {
     $("#footerContacts").append(HTMLtwitter.replace("%data%", bio.contacts.twitter));
     $("#footerContacts").append(HTMLlocation.replace("%data%", bio.contacts.location));
 
-}
+};
 
 var education = {
     "schools": [
@@ -65,7 +65,7 @@ var education = {
             "school" : "Udacity",
             "dates" : "2016",
             "url" : "https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001"
-	   }
+       }
     ],
 };
 
@@ -100,7 +100,7 @@ education.display = function () {
             $(".education-entry:last").append(HTMLonlineURL.replace("%data%", onlineCourse.url));
         });
     }
-}
+};
 
 
 var work = {
@@ -142,22 +142,22 @@ work.display = function () {
             $(".work-entry:last").append(HTMLworkDescription.replace("%data%", job.description));
         });
     }
-}
+};
 
 var projects = {
-	"projectList" : [
+    "projectList" : [
         {
-		"title" : "ACME Audio App",
-		"dates" : "2010",
-		"description" : "ACME Audio App can play a wide variety of screeching sounds. Very useful if you are into that sort of thing.",
-		"images" : ["images/project1-300x200.jpg", "images/project2-300x200.jpg"]
-	   },
-	   {
-		"title" : "ACME Sound Blocker",
-		"dates" : "2012",
-		"description" : "ACME Sound Blocker blocks the screeching sounds made by the ACME Audio App.",
-		"images" : ["images/project3-300x200.jpg","images/project2-300x200.jpg"]
-	   }
+        "title" : "ACME Audio App",
+        "dates" : "2010",
+        "description" : "ACME Audio App can play a wide variety of screeching sounds. Very useful if you are into that sort of thing.",
+        "images" : ["images/project1-300x200.jpg", "images/project2-300x200.jpg"]
+       },
+       {
+        "title" : "ACME Sound Blocker",
+        "dates" : "2012",
+        "description" : "ACME Sound Blocker blocks the screeching sounds made by the ACME Audio App.",
+        "images" : ["images/project3-300x200.jpg","images/project2-300x200.jpg"]
+       }
     ]
 };
 
@@ -175,7 +175,7 @@ projects.display = function() {
             });
         });
     }
-}
+};
 
 //$("#main").append(internationalizeButton);
 bio.display();
