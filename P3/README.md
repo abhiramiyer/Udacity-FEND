@@ -9,4 +9,4 @@ You, the player have to get to the blue waters while avoiding the bugs. Beware: 
 * You lose a point if you get bitten or touch a bug
 
 ## Screenshot
-![Screenshot] (https://github.com/abhiramiyer/Udacity-FEND/tree/master/P3/screenshots/1.png)
+![Screenshot] (https://github.com/abhiramiyer/Udacity-FEND/blob/master/P3/screenshots/1.png)
