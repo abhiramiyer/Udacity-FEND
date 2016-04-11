@@ -51,7 +51,7 @@ var Player = function() {
     // adding -30 to y places the player nicely in the canvas
     //
     this.y = -30 + this.row * 85;
-}
+};
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x , this.y);
@@ -89,7 +89,7 @@ Player.prototype.update = function(dt) {
         //
         // If player has crossed successfully,increment score,reset position and respawn the player
         //
-        if (this.row  == 0) {
+        if (this.row === 0) {
             this.sprite = 'images/Heart.png';
             window.setTimeout(this.reset.bind(this), 500);
             this.resetInProgress = true;
@@ -103,7 +103,7 @@ Player.prototype.reset = function () {
     this.col = 2;
     this.row = 5;
     this.resetInProgress = false;
-}
+};
 
 
 Player.prototype.playerAlive = function (enemy) {
@@ -123,13 +123,13 @@ Player.prototype.playerAlive = function (enemy) {
 Player.prototype.handleInput = function(key) {
     if (!this.resetInProgress) {
         if (key == 'up') {
-            this.row == 0? 0 : this.row--;
+            this.row === 0? 0 : this.row--;
         } else if (key == 'down') {
-            this.row == 5? 0 : this.row++;
+            this.row === 5? 0 : this.row++;
         } else if (key == 'left') {
-            this.col == 0? 0 : this.col--;
-        } else if (key == 'right') {
-            this.col == 4? 0 : this.col++;
+            this.col === 0? 0 : this.col--;
+        } else if (key === 'right') {
+            this.col === 4? 0 : this.col++;
         }
     }
 };
