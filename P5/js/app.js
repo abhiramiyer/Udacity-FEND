@@ -1,9 +1,7 @@
 var LocationData = function (name, lat, lng) {
-    return {
-        name: name,
-        lat: lat,
-        lng: lng
-    }
+    this.name = name;
+    this.lat = lat;
+    this.lng = lng;
 };
 
 var heritageSiteModel = [
@@ -49,7 +47,7 @@ var AppViewModel = function (model) {
     self.filteredList = ko.computed(function() {
         var searchStr = self.searchText().toLowerCase();
         return self.locationList.filter(function(item) {
-            if ((searchStr == "") || (item.name.toLowerCase().indexOf(searchStr) != -1)) {
+            if ((searchStr === "") || (item.name.toLowerCase().indexOf(searchStr) !== -1)) {
                 return true;
             } else {
                 return false;
@@ -69,7 +67,7 @@ var AppViewModel = function (model) {
         var markerIndex = self.locationList.indexOf(locationItem);
         google.maps.event.trigger(self.markers[markerIndex], 'click');
     };
-}
+};
 
 
 ko.bindingHandlers.showMarkers = {
@@ -81,33 +79,46 @@ ko.bindingHandlers.showMarkers = {
         var infoWindow = new google.maps.InfoWindow();
 
         // create marker and info window for each location item
-        // markers are created here once. They will be drawn in the update function
+        // markers are created here once. They will be made visible in the update function
         fullLocationList.forEach(function(locationItem) {
             var markerLocation = new google.maps.LatLng(locationItem.lat, locationItem.lng);
             var marker = new google.maps.Marker({
                 position: markerLocation,
+                map: map,
                 title: locationItem.name,
                 label: locationItem.name[0],
                 animation: google.maps.Animation.DROP
             });
 
             marker.addListener('click', function() {
+                map.setCenter(markerLocation);
                 marker.setAnimation(google.maps.Animation.BOUNCE);
                 setTimeout(function() {
                     marker.setAnimation(null);
                 }, 4000);
 
-            });
+                var markerContent ="Contacting Wikipedia...";
+                infoWindow.close();
+                infoWindow.setContent(markerContent);
+                infoWindow.setOptions({maxWidth: 250});
 
-            var markerContent, extract;
-            // get the data for info window from wikipedia
-            $.ajax({
-                url: "https://en.wikipedia.org//w/api.php?action=query&format=json&prop=pageimages%7Cextracts&indexpageids=1&piprop=thumbnail&pithumbsize=250&pilimit=1&exintro=1&titles=" + locationItem.name,
-                dataType: "jsonp",
-                success: function( response ) {
+                var apiTimeout = setTimeout(function() {
+                    markerContent = "Unable to access Wikipedia. Try again later";
+                    infoWindow.setContent(markerContent);
+                }, 5000);
+                
+                infoWindow.open(map, marker);
+
+                // get the data for info window from wikipedia
+                $.ajax({
+                    url: "https://en.wikipedia.org//w/api.php?action=query&format=json&prop=pageimages%7Cextracts&indexpageids=1&piprop=thumbnail&pithumbsize=250&pilimit=1&exintro=1&titles=" + locationItem.name,
+                    dataType: "jsonp"
+                }).done(function(response) {
                     var pageId = response.query.pageids[0];
                     var thumbnailSrc = response.query.pages[pageId].thumbnail.source;
                     var extract = response.query.pages[pageId].extract;
+
+                    clearTimeout(apiTimeout);
 
                     markerContent = '<div class="info-window-content">' +
                                         '<h3>' + locationItem.name + '</h3>' +
@@ -115,19 +126,14 @@ ko.bindingHandlers.showMarkers = {
                                         '<div>' +
                                             extract +
                                             '<br>' +
-                                            "Source: Wikipedia"
+                                            "Source: Wikipedia" +
                                         '</div>' +
                                     '</div>';
-
-                    marker.addListener('click', function() {
-                        infoWindow.close();
-                        infoWindow.setContent(markerContent);
-                        infoWindow.setOptions({maxWidth: 250});
-                        infoWindow.open(map, marker);
-                    });
-                }
-            }).fail(function() {
-                alert("Unable to access Wikipedia. Try again later");
+                    infoWindow.setContent(markerContent);
+                }).fail(function() {
+                    markerContent = "Unable to access Wikipedia. Try again later";
+                    infoWindow.setContent(markerContent);
+                });
             });
 
             markers.push(marker);
@@ -152,7 +158,7 @@ ko.bindingHandlers.showMarkers = {
 
         // clear all markers first.
         markers.forEach(function(markerItem) {
-            markerItem.setMap(null);
+            markerItem.setVisible(false);
         });
 
         var filteredLocationList = ko.unwrap(valueAccessor());
@@ -175,7 +181,7 @@ ko.bindingHandlers.showMarkers = {
         filteredLocationList.forEach(function(locationItem) {
             markerIndex = fullLocationList.indexOf(locationItem);
             // show the marker on map
-            markers[markerIndex].setMap(map);
+            markers[markerIndex].setVisible(true);
             mapBounds.extend(markers[markerIndex].getPosition());
         });
 
