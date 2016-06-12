@@ -1,3 +1,7 @@
+function googleMapError() {
+    alert('Error: Unable to load Google Maps!');
+}
+
 var LocationData = function (name, lat, lng) {
     this.name = name;
     this.lat = lat;
@@ -5,49 +9,49 @@ var LocationData = function (name, lat, lng) {
 };
 
 var heritageSiteModel = [
-    new LocationData("Kaziranga National Park", 26.666667, 93.35),
-    new LocationData("Manas National Park", 26.716667, 90.933333),
-    new LocationData("Mahabodhi Temple", 24.696004, 84.991358),
-    new LocationData("Humayun's Tomb", 28.593264, 77.250602),
-    new LocationData("Qutb complex", 28.524382, 77.18543),
-    new LocationData("Red Fort", 28.656, 77.241),
-    new LocationData("Old Goa", 15.503, 73.912),
-    new LocationData("Champaner-Pavagadh Archaeological Park", 22.483333, 73.533333),
-    new LocationData("Hampi", 15.335, 76.462),
-    new LocationData("Pattadakal", 15.9484, 75.8159),
-    new LocationData("Sanchi", 23.47941, 77.739616),
-    new LocationData("Bhimbetka rock shelters", 22.937222, 77.6125),
-    new LocationData("Khajuraho Group of Monuments", 24.8519236, 79.9195934),
-    new LocationData("Ajanta Caves", 20.552377, 75.700436),
-    new LocationData("Ellora Caves", 20.026389, 75.179167),
-    new LocationData("Elephanta Caves", 18.9633525, 72.9292977),
-    new LocationData("Chhatrapati Shivaji Terminus", 18.9398259, 72.8332789),
-    new LocationData("Konark Sun Temple", 19.887444, 86.094596),
-    new LocationData("Keoladeo National Park", 27.166667, 77.516667),
-    new LocationData("Jantar Mantar (Jaipur)", 26.92472, 75.82444),
-    new LocationData("Great Living Chola Temples", 10.783056, 79.1325),
-    new LocationData("Group of Monuments at Mahabalipuram", 12.6167, 80.1917),
-    new LocationData("Agra Fort", 27.179542, 78.021101),
-    new LocationData("Fatehpur Sikri", 27.091, 77.661),
-    new LocationData("Taj Mahal", 27.175, 78.041944),
-    new LocationData("Mountain Railways of India", 27.023041,88.2408571),
-    new LocationData("Valley of Flowers National Park", 30.733333, 79.633333),
-    new LocationData("Sundarbans National Park", 21.945, 88.895833),
-    new LocationData("Western Ghats", 10.166667, 77.066667),
-    new LocationData("Hill Forts of Rajasthan", 24.8833, 74.6461),
-    new LocationData("Rani ki vav", 23.85892, 72.10162),
-    new LocationData("Great Himalayan National Park", 31.733333, 77.55)
+    new LocationData('Kaziranga National Park', 26.666667, 93.35),
+    new LocationData('Manas National Park', 26.716667, 90.933333),
+    new LocationData('Mahabodhi Temple', 24.696004, 84.991358),
+    new LocationData('Humayun\'s Tomb', 28.593264, 77.250602),
+    new LocationData('Qutb complex', 28.524382, 77.18543),
+    new LocationData('Red Fort', 28.656, 77.241),
+    new LocationData('Old Goa', 15.503, 73.912),
+    new LocationData('Champaner-Pavagadh Archaeological Park', 22.483333, 73.533333),
+    new LocationData('Hampi', 15.335, 76.462),
+    new LocationData('Pattadakal', 15.9484, 75.8159),
+    new LocationData('Sanchi', 23.47941, 77.739616),
+    new LocationData('Bhimbetka rock shelters', 22.937222, 77.6125),
+    new LocationData('Khajuraho Group of Monuments', 24.8519236, 79.9195934),
+    new LocationData('Ajanta Caves', 20.552377, 75.700436),
+    new LocationData('Ellora Caves', 20.026389, 75.179167),
+    new LocationData('Elephanta Caves', 18.9633525, 72.9292977),
+    new LocationData('Chhatrapati Shivaji Terminus', 18.9398259, 72.8332789),
+    new LocationData('Konark Sun Temple', 19.887444, 86.094596),
+    new LocationData('Keoladeo National Park', 27.166667, 77.516667),
+    new LocationData('Jantar Mantar (Jaipur)', 26.92472, 75.82444),
+    new LocationData('Great Living Chola Temples', 10.783056, 79.1325),
+    new LocationData('Group of Monuments at Mahabalipuram', 12.6167, 80.1917),
+    new LocationData('Agra Fort', 27.179542, 78.021101),
+    new LocationData('Fatehpur Sikri', 27.091, 77.661),
+    new LocationData('Taj Mahal', 27.175, 78.041944),
+    new LocationData('Mountain Railways of India', 27.023041,88.2408571),
+    new LocationData('Valley of Flowers National Park', 30.733333, 79.633333),
+    new LocationData('Sundarbans National Park', 21.945, 88.895833),
+    new LocationData('Western Ghats', 10.166667, 77.066667),
+    new LocationData('Hill Forts of Rajasthan', 24.8833, 74.6461),
+    new LocationData('Rani ki vav', 23.85892, 72.10162),
+    new LocationData('Great Himalayan National Park', 31.733333, 77.55)
     ];
 
 var AppViewModel = function (model) {
     var self = this;
     self.locationList = model;
-    self.searchText = ko.observable("");
+    self.searchText = ko.observable('');
 
     self.filteredList = ko.computed(function() {
         var searchStr = self.searchText().toLowerCase();
         return self.locationList.filter(function(item) {
-            if ((searchStr === "") || (item.name.toLowerCase().indexOf(searchStr) !== -1)) {
+            if ((searchStr === '') || (item.name.toLowerCase().indexOf(searchStr) !== -1)) {
                 return true;
             } else {
                 return false;
@@ -62,6 +66,7 @@ var AppViewModel = function (model) {
     self.map = new google.maps.Map(document.querySelector('#map'), mapOptions);
     self.mapBounds = new google.maps.LatLngBounds();
     self.markers = [];
+    self.infoWindow = new google.maps.InfoWindow();
 
     self.sendClickToMarker = function(locationItem) {
         var markerIndex = self.locationList.indexOf(locationItem);
@@ -75,8 +80,7 @@ ko.bindingHandlers.showMarkers = {
         var fullLocationList = viewModel.locationList;
         var map = viewModel.map;
         var markers = viewModel.markers;
-
-        var infoWindow = new google.maps.InfoWindow();
+        var infoWindow = viewModel.infoWindow;
 
         // create marker and info window for each location item
         // markers are created here once. They will be made visible in the update function
@@ -95,15 +99,15 @@ ko.bindingHandlers.showMarkers = {
                 marker.setAnimation(google.maps.Animation.BOUNCE);
                 setTimeout(function() {
                     marker.setAnimation(null);
-                }, 4000);
+                }, 2800);  // 700ms per bounce. 4 bounces
 
-                var markerContent ="Contacting Wikipedia...";
+                var markerContent ='Contacting Wikipedia...';
                 infoWindow.close();
                 infoWindow.setContent(markerContent);
                 infoWindow.setOptions({maxWidth: 250});
 
                 var apiTimeout = setTimeout(function() {
-                    markerContent = "Unable to access Wikipedia. Try again later";
+                    markerContent = 'Unable to access Wikipedia. Try again later';
                     infoWindow.setContent(markerContent);
                 }, 5000);
                 
@@ -126,12 +130,12 @@ ko.bindingHandlers.showMarkers = {
                                         '<div>' +
                                             extract +
                                             '<br>' +
-                                            "Source: Wikipedia" +
+                                            'Source: Wikipedia' +
                                         '</div>' +
                                     '</div>';
                     infoWindow.setContent(markerContent);
                 }).fail(function() {
-                    markerContent = "Unable to access Wikipedia. Try again later";
+                    markerContent = 'Unable to access Wikipedia. Try again later';
                     infoWindow.setContent(markerContent);
                 });
             });
@@ -140,8 +144,8 @@ ko.bindingHandlers.showMarkers = {
         });
 
         // set up handler for the div resize events
-        google.maps.event.addDomListener(window, "resize", function() {
-            google.maps.event.trigger(map, "resize");
+        google.maps.event.addDomListener(window, 'resize', function() {
+            google.maps.event.trigger(map, 'resize');
             // fit the map to the marker bounds and center the map
             map.fitBounds(viewModel.mapBounds);
             map.setCenter(viewModel.mapBounds.getCenter());
@@ -155,6 +159,10 @@ ko.bindingHandlers.showMarkers = {
         var map = viewModel.map;
         var markers = viewModel.markers;
         var fullLocationList = viewModel.locationList;
+        var infoWindow = viewModel.infoWindow;
+
+        // Close any open info window before clearing the markers
+        infoWindow.close();
 
         // clear all markers first.
         markers.forEach(function(markerItem) {
