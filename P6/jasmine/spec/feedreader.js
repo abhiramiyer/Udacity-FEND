@@ -57,7 +57,7 @@ $(function() {
          * hidden by default. 
          */
         it('is hidden by default', function() {
-            expect($('body').attr('class')).toBe("menu-hidden");
+            expect($('body').hasClass('menu-hidden')).toBeTruthy();
         });
 
         /* A test that ensures the menu changes
@@ -68,9 +68,11 @@ $(function() {
         it('is visible when clicked and hidden when clicked again', function() {
             var menuIcon = $('.menu-icon-link');
             menuIcon.trigger('click');
-            expect($('body').attr('class')).toBe('');
+            // menu should be visible
+            expect($('body').hasClass('menu-hidden')).toBeFalsy();
             menuIcon.trigger('click');
-            expect($('body').attr('class')).toBe("menu-hidden");
+            // menu should be hidden
+            expect($('body').hasClass('menu-hidden')).toBeTruthy();
         });
     });
 
@@ -82,11 +84,11 @@ $(function() {
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
         beforeEach(function(done) {
-            loadFeed(0, function() {done();});
+            loadFeed(0, done);
         });
 
         it('there is at least a single .entry within .feed', function(done) {
-            expect($('.entry').length).toBeGreaterThan(0);
+            expect($('.feed .entry-link .entry').length).toBeGreaterThan(0);
             done();
         });
     });
@@ -96,15 +98,20 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+        var feedContentOriginal, feedContentNew;
+       
         beforeEach(function(done) {
-            // clear the feed container first
-            $('.feed').empty();
             // load a new feed
-            loadFeed(1, function() {done();});
+            loadFeed(1, function() {
+                feedContentOriginal = $('.feed').html();
+                // load a different feed now
+                loadFeed(0, done);
+            });
         });
 
         it('when new feed is loaded, feed content changes', function(done) {
-            expect($('.entry').length).toBeGreaterThan(0);
+            feedContentNew = $('.feed').html();
+            expect(feedContentNew).not.toEqual(feedContentOriginal);
             done();
         });
 
